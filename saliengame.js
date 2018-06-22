@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Salien game 2018
 // @namespace    http://tampermonkey.net/
-// @version      6.66
+// @version      6.67
 // @description  Automatic play
 // @author       t0tal
 // @match        https://*/saliengame/*
