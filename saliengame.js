@@ -66,7 +66,7 @@
 			GameLoadError
 		);
 		
-		setTimeout(functioN() {
+		setTimeout(function() {
 			intervalFunc = setInterval(gameCheck, 1000);
 		}, 10000);
 	}
