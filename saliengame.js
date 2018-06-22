@@ -11,7 +11,9 @@
 (function() {
     'use strict';
     CEnemy.prototype.Walk = function(){this.Die(true);};
+	var zonePosition = 35;
 	var preferRoomNumber = 48;
+	var joiningPlanet = false;
     var joiningZone = false;
     var gameCheck = function(){
         if (!gGame || !gGame.m_State) return;
@@ -20,15 +22,16 @@
             startGame();
             return;
         }
-
+		
         if (gGame.m_State.m_VictoryScreen || gGame.m_State.m_LevelUpScreen) {
-            gGame.ChangeState( new CBattleSelectionState( gGame.m_State.m_PlanetData.id ) );
-            console.log('game clear');
+			gGame.ChangeState( new CBattleSelectionState( gGame.m_State.m_PlanetData.id ) );
+            console.log('game clear. current planet id = '+gGame.m_State.m_PlanetData.id);
             return;
         }
 
         if (gGame.m_State.m_EnemyManager) {
             joiningZone = false;
+			joiningPlanet = false;
             return;
         }
 
@@ -50,7 +53,23 @@
     };
 
     var intervalFunc = setInterval(gameCheck, 1000);
-
+	var joinPlanet = function(planetId) {
+		if(joiningPlanet) return;
+		console.log('Joining planet:', planetId);
+		joiningPlanet = true;
+		clearInterval(intervalFunc);
+		gServer.JoinPlanet(
+			planetId,
+			function ( response ) {
+				gGame.ChangeState( new CBattleSelectionState( planetId ) );
+			},
+			GameLoadError
+		);
+		
+		setTimeout(functioN() {
+			intervalFunc = setInterval(gameCheck, 1000);
+		}, 10000);
+	}
     var joinZone = function(zoneId) {
         if (joiningZone) return;
         console.log('Joining zone:', zoneId);
